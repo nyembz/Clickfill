@@ -1,5 +1,6 @@
 // src/components/AuthForm.jsx
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -12,6 +13,7 @@ const AuthForm = ({ isRegister = false }) => {
   const [organizationName, setOrganizationName] = useState('');
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,7 +30,8 @@ const AuthForm = ({ isRegister = false }) => {
         setMessage('Registration successful! Please log in.');
       } else {
         localStorage.setItem('token', response.data.token);
-        setMessage('Login successful! Redirecting...');
+        // Redirect to the dashboard on successful login
+        navigate('/dashboard');
       }
     } catch (err) {
       setError(err.response?.data?.message || 'An error occurred.');
@@ -42,12 +45,12 @@ const AuthForm = ({ isRegister = false }) => {
         <CardDescription>{isRegister ? 'Enter your details to get started.' : 'Enter your credentials to access your account.'}</CardDescription>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit}>
+        <form id="auth-form" onSubmit={handleSubmit}>
           <div className="grid w-full items-center gap-4">
             {isRegister && (
               <div className="flex flex-col space-y-1.5">
                 <Label htmlFor="organization">Organization Name</Label>
-                <Input id="organization" placeholder="Your Company Inc." value={organizationName} onChange={(e) => setOrganizationName(e.target.value)} required />
+                <Input id="organization" name="organization" placeholder="Your Company Inc." value={organizationName} onChange={(e) => setOrganizationName(e.target.value)} required />
               </div>
             )}
             <div className="flex flex-col space-y-1.5">
@@ -62,7 +65,7 @@ const AuthForm = ({ isRegister = false }) => {
         </form>
       </CardContent>
       <CardFooter className="flex flex-col items-stretch">
-        <Button onClick={handleSubmit}>{isRegister ? 'Register' : 'Login'}</Button>
+        <Button type="submit" form="auth-form">{isRegister ? 'Register' : 'Login'}</Button>
         {message && <p className="mt-3 text-sm text-center text-green-600">{message}</p>}
         {error && <p className="mt-3 text-sm text-center text-red-600">{error}</p>}
       </CardFooter>

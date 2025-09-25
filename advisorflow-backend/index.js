@@ -6,6 +6,7 @@ import authRoutes from './routes/auth.js';
 // --- Core Application Setup ---
 const app = express();
 const PORT = process.env.PORT || 5000; // <-- IMPROVED: Changed default to 5000
+const clientRoutes = require('./routes/clients');
 
 // --- Global Middleware ---
 
@@ -21,6 +22,9 @@ app.use(express.json());
 
 // Use the authentication router for any requests that start with '/api/auth'
 app.use('/api/auth', authRoutes);
+
+// Use the new router for any requests to /api/clients
+app.use('/api/clients', clientRoutes);
 
 // --- Server Startup ---
 app.listen(PORT, () => {

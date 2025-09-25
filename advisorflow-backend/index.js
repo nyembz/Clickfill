@@ -3,6 +3,8 @@ import cors from 'cors'; // <-- ADDED: The crucial CORS middleware
 import 'dotenv/config';  // <-- IMPROVED: Cleaner way to load .env
 import authRoutes from './routes/auth.js';
 import clientRoutes from './routes/clients.js';
+import authMiddleware from './middleware/auth.js'
+
 
 
 // --- Core Application Setup ---
@@ -26,7 +28,7 @@ app.use(express.json());
 app.use('/api/auth', authRoutes);
 
 // Use the new router for any requests to /api/clients
-app.use('/api/clients', clientRoutes);
+app.use('/api/clients', authMiddleware, clientRoutes);
 
 // --- Server Startup ---
 app.listen(PORT, () => {

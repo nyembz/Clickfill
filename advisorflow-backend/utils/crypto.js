@@ -1,4 +1,5 @@
-const crypto = require('crypto');
+import crypto from 'crypto';
+
 
 const ALGORITHM = 'aes-256-gcm';
 const IV_LENGTH = 16; // For GCM, the IV is typically 12 or 16 bytes.
@@ -54,4 +55,4 @@ function decrypt(encryptedText) {
   }
 }
 
-module.exports = { encrypt, decrypt };
+export { encrypt, decrypt };

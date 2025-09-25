@@ -2,11 +2,13 @@ import express from 'express';
 import cors from 'cors'; // <-- ADDED: The crucial CORS middleware
 import 'dotenv/config';  // <-- IMPROVED: Cleaner way to load .env
 import authRoutes from './routes/auth.js';
+import clientRoutes from './routes/clients.js';
+
 
 // --- Core Application Setup ---
 const app = express();
 const PORT = process.env.PORT || 5000; // <-- IMPROVED: Changed default to 5000
-const clientRoutes = require('./routes/clients');
+
 
 // --- Global Middleware ---
 

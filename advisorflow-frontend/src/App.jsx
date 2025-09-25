@@ -3,6 +3,7 @@ import LoginPage from '@/pages/LoginPage';
 import RegisterPage from '@/pages/RegisterPage';
 import DashboardPage from '@/pages/DashboardPage';
 import ProtectedRoute from '@/components/ProtectedRoute';
+import ClientDetailPage from '@/pages/ClientDetailPage';
 
 // A simple component to render navigation links conditionally
 const Navigation = () => {
@@ -32,6 +33,7 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
           <Route path="*" element={<Navigate to="/login" />} />
+          <Route path="/client/:id" element={<ProtectedRoute><ClientDetailPage /></ProtectedRoute>}/>
         </Routes>
       </div>
     </Router>

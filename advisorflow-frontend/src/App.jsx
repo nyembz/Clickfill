@@ -1,42 +1,37 @@
-import { BrowserRouter as Router, Routes, Route, Link, Navigate, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import LoginPage from '@/pages/LoginPage';
 import RegisterPage from '@/pages/RegisterPage';
 import DashboardPage from '@/pages/DashboardPage';
-import ProtectedRoute from '@/components/ProtectedRoute';
 import ClientDetailPage from '@/pages/ClientDetailPage';
-
-// A simple component to render navigation links conditionally
-const Navigation = () => {
-  const location = useLocation();
-  const token = localStorage.getItem('token');
-
-  // Don't show nav links on the dashboard page
-  if (token && location.pathname.startsWith('/dashboard')) {
-    return null;
-  }
-
-  return (
-    <nav className="p-4 bg-white rounded-lg shadow-md mb-8">
-      <Link to="/login" className="p-2 mx-2 text-gray-700 hover:text-blue-600 font-medium">Login</Link>
-      <Link to="/register" className="p-2 mx-2 text-gray-700 hover:text-blue-600 font-medium">Register</Link>
-    </nav>
-  );
-};
+import ProtectedRoute from '@/components/ProtectedRoute';
+import DashboardLayout from '@/components/DashboardLayout'; // Import the new layout
 
 function App() {
   return (
     <Router>
-      <div className="w-full min-h-screen bg-gray-100 flex flex-col items-center justify-center p-4">
-        <Navigation />
-        <Routes>
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
-          <Route path="*" element={<Navigate to="/login" />} />
-          <Route path="/client/:id" element={<ProtectedRoute><ClientDetailPage /></ProtectedRoute>}/>
-        </Routes>
-      </div>
+      <Routes>
+        {/* Public routes that don't have the sidebar */}
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        
+        {/* Protected routes that use the new DashboardLayout */}
+        <Route 
+          element={
+            <ProtectedRoute>
+              <DashboardLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/clients" element={<Navigate to="/dashboard" />} />
+          <Route path="/client/:id" element={<ClientDetailPage />} />
+        </Route>
+        
+        {/* Default redirect */}
+        <Route path="*" element={<Navigate to="/login" />} />
+      </Routes>
     </Router>
   );
 }
+
 export default App;
